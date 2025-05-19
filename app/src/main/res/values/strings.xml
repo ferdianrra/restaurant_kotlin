@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Restauran Kotlin</string>
+    <string name="detail_btn">Detail</string>
+    <string name="navigate_to_cart_btn">Navigate To Cart</string>
+    <string name="insert_cart_btn">Add To Cart</string>
+    <string name="cart_list_tag">Cart List</string>
 </resources>
