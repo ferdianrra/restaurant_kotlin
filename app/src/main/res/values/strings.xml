@@ -3,5 +3,9 @@
     <string name="detail_btn">Detail</string>
     <string name="navigate_to_cart_btn">Navigate To Cart</string>
     <string name="insert_cart_btn">Add To Cart</string>
-    <string name="cart_list_tag">Cart List</string>
+    <string name="back_to_menu_btn">Back To Menu</string>
+    <string name="add_to_cart_success_toast">%d item berhasil ditambahkan</string>
+    <string name="add_to_cart_failed_toast">Item gagal ditambahkan</string>
+    <string name="cart_list_tag">Cart List</string>    \
+    <string name="empty_cart">Cart is Empty</string>
 </resources>

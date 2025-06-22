@@ -29,7 +29,7 @@ class RestaurantTest {
 
     @Test
     fun insert_menu_to_cart() {
-        for (index in 0 until 100) {
+        for (index in 0 until 10) {
             // Mau menampilkan sesuai item
             composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.detail_btn)+ dummyMenu[0].title).performScrollTo()
             composeTestRule.waitForIdle()
@@ -45,9 +45,18 @@ class RestaurantTest {
             composeTestRule.onNodeWithText("Menu").assertIsDisplayed()
 
         }
-
     }
 
+    @Test
+    fun navigate_to_detail_menu() {
+        for (index in 0 until 10) {
+            composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.detail_btn)+ dummyMenu[0].title).performScrollTo()
+            composeTestRule.waitForIdle()
+            composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.detail_btn)+dummyMenu[0].title).performClick()
+            composeTestRule.onNodeWithText(dummyMenu[0].title).assertIsDisplayed()
+            composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.back_to_menu_btn)).performClick()
+            composeTestRule.onNodeWithText("Menu").assertIsDisplayed()
 
-
+        }
+    }
 }

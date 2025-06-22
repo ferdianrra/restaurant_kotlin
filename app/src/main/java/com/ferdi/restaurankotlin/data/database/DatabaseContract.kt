@@ -9,5 +9,6 @@ object DatabaseContract {
         const val COLUMN_NAME_IMAGE = "image"
         const val COLUMN_NAME_PRICE = "price"
         const val COLUMN_NAME_ID = "id"
+        const val COLUMN_NAME_QUANTITY = "quantity"
     }
 }

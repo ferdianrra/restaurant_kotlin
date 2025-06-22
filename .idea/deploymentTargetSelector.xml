@@ -8,16 +8,10 @@
       <SelectionState runConfigName="insert_menu_to_cart()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="load_database()">
+      <SelectionState runConfigName="RestaurantTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="CartTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="insertMenuToCart()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="load_database() (1)">
+      <SelectionState runConfigName="navigate_to_detail_menu()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

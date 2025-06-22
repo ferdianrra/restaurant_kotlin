@@ -13,7 +13,8 @@ object MappingHelper {
                 val title = getString(getColumnIndexOrThrow(DatabaseContract.RestaurantDatabase.COLUMN_NAME_TITLE))
                 val price = getDouble(getColumnIndexOrThrow(DatabaseContract.RestaurantDatabase.COLUMN_NAME_PRICE))
                 val image = getInt(getColumnIndexOrThrow(DatabaseContract.RestaurantDatabase.COLUMN_NAME_IMAGE))
-                cartList.add(Cart(id, title, image, price))
+                val quantity = getInt(getColumnIndexOrThrow(DatabaseContract.RestaurantDatabase.COLUMN_NAME_QUANTITY))
+                cartList.add(Cart(id, title, image, price, quantity))
             }
         }
         return cartList

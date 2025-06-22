@@ -2,14 +2,14 @@ package com.ferdi.restaurankotlin
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,7 +28,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -39,12 +41,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.ferdi.restaurankotlin.data.database.CartHelper
 import com.ferdi.restaurankotlin.data.model.Cart
 import com.ferdi.restaurankotlin.utils.MappingHelper
 import com.ferdi.restaurankotlin.utils.formatRupiah
+import com.ferdi.restaurankotlin.widget.AnimatedLoader
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +62,8 @@ fun CartScreen(
 ) {
     val context = LocalContext.current
     var cartList by remember { mutableStateOf<List<Cart>>(emptyList()) }
+    var showAnimationSuccess by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         cartList = withContext(Dispatchers.IO) {
@@ -84,32 +92,74 @@ fun CartScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {
-            LazyColumn(
-                modifier = Modifier.weight(1f).testTag(stringResource(R.string.cart_list_tag)),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(cartList.size) { index ->
-                    val cart = cartList[index]
-                    ItemCart(
-                        title = cart.title,
-                        price = cart.price,
-                        image = cart.image
-                    )
+            if(cartList.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag(stringResource(R.string.cart_list_tag)),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(cartList.size) { index ->
+                        val cart = cartList[index]
+                        ItemCart(
+                            title = cart.title,
+                            price = cart.price,
+                            image = cart.image,
+                            quantity = cart.quantity
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(stringResource(R.string.empty_cart))
                 }
             }
 
+            if(showAnimationSuccess) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .zIndex(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AnimatedLoader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(top = 16.dp)
+                    )
+                }
+            }
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                onClick = {}
+                onClick = {
+                    coroutineScope.launch {
+                        val cartHelper = CartHelper.getInstance(context)
+                        cartHelper.open()
+                        val result = cartHelper.deleteAll()
+                        cartHelper.close()
+
+                        if (result > 0) {
+                            cartList = withContext(Dispatchers.IO) { loadCart(context) }
+                            showAnimationSuccess = true
+                            delay(5000L)
+                            showAnimationSuccess = false
+                        }
+                    }
+                }
             ) {
                 Text(
                     "Check Out",
                     fontSize = 14.sp
                 )
             }
-
         }
     }
 }
@@ -120,7 +170,8 @@ private fun ItemCart(
     modifier: Modifier = Modifier,
     title: String,
     price: Double,
-    image: Int
+    image: Int,
+    quantity: Int
 ) {
     Row(
         modifier = modifier
@@ -142,7 +193,11 @@ private fun ItemCart(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                formatRupiah(price),
+                "Quantity: $quantity",
+                fontSize = 14.sp
+            )
+            Text(
+                "Price: ${formatRupiah(price)}",
                 fontSize = 14.sp
             )
         }

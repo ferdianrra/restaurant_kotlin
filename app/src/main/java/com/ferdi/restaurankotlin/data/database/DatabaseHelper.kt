@@ -7,6 +7,7 @@ import com.ferdi.restaurankotlin.data.database.DatabaseContract.RestaurantDataba
 import com.ferdi.restaurankotlin.data.database.DatabaseContract.RestaurantDatabase.COLUMN_NAME_IMAGE
 import com.ferdi.restaurankotlin.data.database.DatabaseContract.RestaurantDatabase.COLUMN_NAME_PRICE
 import com.ferdi.restaurankotlin.data.database.DatabaseContract.RestaurantDatabase.COLUMN_NAME_TITLE
+import com.ferdi.restaurankotlin.data.database.DatabaseContract.RestaurantDatabase.COLUMN_NAME_QUANTITY
 import com.ferdi.restaurankotlin.data.database.DatabaseContract.RestaurantDatabase.TABLE_NAME
 
 internal class DatabaseHelper (context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -31,7 +32,8 @@ internal class DatabaseHelper (context: Context): SQLiteOpenHelper(context, DATA
                     "$COLUMN_NAME_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "$COLUMN_NAME_TITLE TEXT," +
                     "$COLUMN_NAME_IMAGE INTEGER," +
-                    "$COLUMN_NAME_PRICE REAL)"
+                    "$COLUMN_NAME_PRICE REAL," +
+                    "$COLUMN_NAME_QUANTITY REAL)"
 
         private const val SQL_DELETE_TABLE_CART = "DROP TABLE IF EXISTS $TABLE_NAME"
     }
