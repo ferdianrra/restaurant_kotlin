@@ -11,6 +11,9 @@
       <SelectionState runConfigName="RestaurantTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="RestaurantTes">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
       <SelectionState runConfigName="navigate_to_detail_menu()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

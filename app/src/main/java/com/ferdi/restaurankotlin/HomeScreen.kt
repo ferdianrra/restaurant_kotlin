@@ -85,7 +85,9 @@ fun HomeScreen(
         ) {
             items(dummyMenu.size) { index ->
                 Box(
-                    modifier = Modifier.clickable {
+                    modifier = Modifier
+                        .testTag(stringResource(R.string.detail_btn) + dummyMenu[index].title)
+                        .clickable {
                         navigateToDetail(index)
                     }
                 ) {
@@ -185,7 +187,6 @@ fun ItemMenu(
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .testTag(stringResource(R.string.detail_btn) + name)
             ,
             onClick = {
                 val result = if(!isItemInCart(name, context)) {

@@ -49,7 +49,8 @@ class RestaurantTest {
 
     @Test
     fun navigate_to_detail_menu() {
-        for (index in 0 until 10) {
+        Thread.sleep(3000)
+        for (index in 0 until 1) {
             composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.detail_btn)+ dummyMenu[0].title).performScrollTo()
             composeTestRule.waitForIdle()
             composeTestRule.onNodeWithTag(composeTestRule.activity.getString(R.string.detail_btn)+dummyMenu[0].title).performClick()
@@ -58,5 +59,6 @@ class RestaurantTest {
             composeTestRule.onNodeWithText("Menu").assertIsDisplayed()
 
         }
+        Thread.sleep(5000)
     }
 }
