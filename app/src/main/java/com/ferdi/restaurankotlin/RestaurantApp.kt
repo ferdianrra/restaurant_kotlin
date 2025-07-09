@@ -44,7 +44,15 @@ fun RestaurantApp(
             )
         }
         composable(Screen.cart.route) {
-            CartScreen(navController)
+            CartScreen(
+                navController,
+                navigateToCheckout = {
+                    navController.navigate(Screen.checkout.route)
+                }
+            )
+        }
+        composable(Screen.checkout.route) {
+            CheckoutScreen(navController)
         }
     }
 }

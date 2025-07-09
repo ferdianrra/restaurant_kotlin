@@ -1,6 +1,10 @@
 package com.ferdi.restaurankotlin
 
+import android.R.attr.onClick
+import android.util.Log.i
 import android.widget.Toast
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,8 +15,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,6 +37,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +51,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,6 +62,7 @@ import com.ferdi.restaurankotlin.utils.addToCart
 import com.ferdi.restaurankotlin.utils.formatRupiah
 import com.ferdi.restaurankotlin.utils.isItemInCart
 import com.ferdi.restaurankotlin.utils.updateQuantityCart
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +71,41 @@ fun HomeScreen(
     navigateToDetail: (Int) -> Unit,
     navigateToCart: () -> Unit
 ) {
+//    val scrollState = rememberLazyListState()
+//
+//    LaunchedEffect(Unit) {
+//        val startTime = System.currentTimeMillis()
+//        var scrollDown = true
+//
+//        while (System.currentTimeMillis() - startTime < 30_000) {
+//            if (scrollDown) {
+//                scrollState.animateScrollToItem(index = dummyMenu.lastIndex)
+//            } else {
+//                scrollState.animateScrollToItem(index = 0)
+//            }
+//
+//            scrollDown = !scrollDown
+//        }
+//    }
+
+    val scrollState = rememberLazyStaggeredGridState()
+    LaunchedEffect(Unit) {
+        val startTime = System.currentTimeMillis()
+
+        while (System.currentTimeMillis() - startTime < 30_000) {
+            // Scroll turun
+            for (i in 0..dummyMenu.lastIndex) {
+                scrollState.animateScrollToItem(i)
+                delay(20L)
+            }
+
+            // Scroll naik
+            for (i in dummyMenu.lastIndex downTo 0) {
+                scrollState.animateScrollToItem(i)
+                delay(20L)
+            }
+        }
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -77,16 +123,19 @@ fun HomeScreen(
     ) { innerPadding ->
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(2),
+         //   state = scrollState,
             verticalItemSpacing = 8.dp,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
+                .testTag(stringResource(R.string.menu_list_tag))
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {
             items(dummyMenu.size) { index ->
                 Box(
                     modifier = Modifier
-                        .testTag(stringResource(R.string.detail_btn) + dummyMenu[index].title)
+                        .testTag(dummyMenu[index].title)
+                        .semantics(mergeDescendants = true) {}
                         .clickable {
                         navigateToDetail(index)
                     }
@@ -100,6 +149,34 @@ fun HomeScreen(
                 }
             }
         }
+//        LazyColumn(
+//            state = scrollState,
+//            contentPadding = innerPadding,
+//            verticalArrangement = Arrangement.spacedBy(8.dp),
+//            modifier = Modifier
+//                .padding(horizontal = 16.dp)
+//        ) {
+//            items(dummyMenu.size) { index ->
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .testTag(dummyMenu[index].title)
+//                        .semantics(mergeDescendants = true) {}
+//                        .clickable {
+//                            navigateToDetail(index)
+//                        }
+//                ) {
+//                    ItemMenu(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .clip(RoundedCornerShape(16.dp)),
+//                        name = dummyMenu[index].title,
+//                        price = dummyMenu[index].price,
+//                        imageMenu = dummyMenu[index].image,
+//                    )
+//                }
+//            }
+//        }
     }
 }
 
@@ -150,6 +227,7 @@ fun ItemMenu(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
+                modifier = Modifier.testTag("min-$name"),
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = Color.White
@@ -170,6 +248,7 @@ fun ItemMenu(
                 fontSize = 14.sp,
             )
             IconButton(
+                modifier = Modifier.testTag("add-$name"),
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = Color.White
@@ -187,6 +266,7 @@ fun ItemMenu(
         Button(
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag("add-to-cart-$name")
             ,
             onClick = {
                 val result = if(!isItemInCart(name, context)) {

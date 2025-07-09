@@ -6,4 +6,5 @@ sealed class Screen(val route: String){
         fun createRoute(index: Int) ="detail/$index"
     }
     object cart: Screen("cart")
+    object checkout: Screen("checkout")
 }

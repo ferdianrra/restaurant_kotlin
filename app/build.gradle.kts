@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.common.android)
+    implementation(libs.androidx.ui.test.junit4.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -63,5 +64,6 @@ dependencies {
     implementation(libs.androidx.sqlite.ktx)
     implementation(libs.lottie.compose)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.material3)
 
 }

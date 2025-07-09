@@ -2,6 +2,7 @@ package com.ferdi.restaurankotlin.utils
 
 import android.content.ContentValues
 import android.content.Context
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import com.ferdi.restaurankotlin.data.database.CartHelper
 import com.ferdi.restaurankotlin.data.database.DatabaseContract
 import java.text.NumberFormat
@@ -53,4 +54,29 @@ fun isItemInCart(name: String, context: Context): Boolean {
     val result = cartHelper.isItemInCart(name)
     cartHelper.close()
     return result
+}
+
+fun ComposeTestRule.inRealTime(
+    label: String = "RealTime",
+    duration: Long = 0,
+    block: () -> Unit
+) {
+    mainClock.autoAdvance = false
+    val startVirtual = mainClock.currentTime
+    val startReal = System.currentTimeMillis()
+
+    block()
+
+    while (true) {
+        val virt = mainClock.currentTime - startVirtual
+        val real = System.currentTimeMillis() - startReal
+
+        if (virt > real)
+            Thread.sleep(1)
+        else
+            mainClock.advanceTimeByFrame()
+
+        if (virt > duration && real > duration) break
+    }
+    mainClock.autoAdvance = true
 }

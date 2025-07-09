@@ -5,16 +5,19 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="insert_menu_to_cart()">
+      <SelectionState runConfigName="simulateNaturalScroll()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="RestaurantTest">
+      <SelectionState runConfigName="refresh_cart()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="RestaurantTes">
+      <SelectionState runConfigName="trigger_refresh_cart()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="navigate_to_detail_menu()">
+      <SelectionState runConfigName="simulate_checkout_cart()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="scrolling_menu()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
